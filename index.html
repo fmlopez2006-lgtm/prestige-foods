@@ -3,21 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Prestige Foods | Presentación de Exportación</title>
+    <title>Prestige Foods | Editorial Premium</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
           extend: {
             fontFamily: {
               serif: ['"Playfair Display"', 'serif'],
-              sans: ['"Lato"', 'sans-serif'],
+              sans: ['"Inter"', 'sans-serif'],
             },
             colors: {
-              'prestige-green': '#064e3b',
-              'prestige-gold': '#d4af37',
-              'prestige-cream': '#fdfbf7',
+              'prestige-dark': '#050505',
+              'prestige-emerald': '#011F1B',
+              'prestige-copper': '#B8860B',
+              'prestige-cream': '#F9F7F2',
             }
           }
         }
@@ -25,44 +26,46 @@
     </script>
     <style>
       body {
-        background-color: #020617;
-        color: #fdfbf7;
+        background-color: #050505;
+        color: #F9F7F2;
         margin: 0;
         padding: 0;
+        overflow-x: hidden;
       }
       
+      .glass-card {
+        background: rgba(1, 31, 27, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(184, 134, 11, 0.2);
+      }
+
       @media print {
         body { background-color: white; color: black; }
         .no-print { display: none !important; }
-        #root > div { display: block !important; padding: 0 !important; }
         .slide-container { 
-          position: relative !important; 
-          display: block !important; 
           width: 297mm;
           height: 210mm;
           page-break-after: always;
-          opacity: 1 !important;
-          z-index: 10 !important;
         }
       }
 
-      ::-webkit-scrollbar { width: 6px; }
-      ::-webkit-scrollbar-track { background: #0f172a; }
-      ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; }
+      ::-webkit-scrollbar { width: 4px; }
+      ::-webkit-scrollbar-track { background: #050505; }
+      ::-webkit-scrollbar-thumb { background: #B8860B; }
     </style>
     <script type="importmap">
-    {
-      "imports": {
-        "react": "https://esm.sh/react@18.3.1",
-        "react/": "https://esm.sh/react@18.3.1/",
-        "react-dom": "https://esm.sh/react-dom@18.3.1?deps=react@18.3.1",
-        "react-dom/": "https://esm.sh/react-dom@18.3.1/",
-        "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?deps=react@18.3.1",
-        "lucide-react": "https://esm.sh/lucide-react@0.460.0?deps=react@18.3.1",
-        "@google/genai": "https://esm.sh/@google/genai@1.39.0"
-      }
-    }
-    </script>
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react/": "https://esm.sh/react@18.3.1/",
+    "react-dom": "https://esm.sh/react-dom@18.3.1?deps=react@18.3.1",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?deps=react@18.3.1",
+    "lucide-react": "https://esm.sh/lucide-react@0.460.0?deps=react@18.3.1",
+    "@google/genai": "https://esm.sh/@google/genai@1.39.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/"
+  }
+}
+</script>
   </head>
   <body>
     <div id="root"></div>

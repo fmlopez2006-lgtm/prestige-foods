@@ -3,14 +3,14 @@ import { AppState, SlideContent } from './types';
 import { generatePresentation } from './services/geminiService';
 import PresentationViewer from './components/PresentationViewer';
 import ChatWidget from './components/ChatWidget';
-import { Sparkles, ArrowRight, AlertCircle, Globe, Leaf, Briefcase } from 'lucide-react';
+import { Sparkles, ArrowRight, AlertCircle, Zap, Shield, Crown } from 'lucide-react';
 
 const LOADING_MESSAGES = [
-  "Cosechando las mejores frutas colombianas...",
-  "Extrayendo el realismo mágico en cada slide...",
-  "Diseñando estrategia de exportación premium...",
-  "Preparando la logística del sabor...",
-  "Cargando el sol del trópico..."
+  "Curando selección de imágenes...",
+  "Redactando narrativa estratégica...",
+  "Ajustando paleta editorial...",
+  "Certificando origen colombiano...",
+  "Pulimentando el cobre y esmeralda..."
 ];
 
 const App: React.FC = () => {
@@ -50,86 +50,91 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white relative font-sans">
+    <div className="min-h-screen bg-prestige-dark text-prestige-cream relative font-sans">
       {appState === AppState.READY ? (
         <PresentationViewer slides={slides} onReset={handleReset} />
       ) : (
         <div className="min-h-screen flex flex-col items-center justify-center p-6 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-             <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-prestige-green rounded-full blur-[160px] opacity-30"></div>
-             <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-prestige-gold rounded-full blur-[160px] opacity-10"></div>
+          <div className="absolute inset-0 z-0">
+             <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-prestige-emerald rounded-full blur-[160px] opacity-20"></div>
+             <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-prestige-copper rounded-full blur-[160px] opacity-10"></div>
           </div>
 
-          <div className="z-10 max-w-3xl w-full text-center space-y-12">
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-prestige-green/20 border border-prestige-gold/30 text-prestige-gold text-xs font-bold uppercase tracking-widest">
-                <Sparkles size={14} />
-                <span>Consultoría de Exportación AI</span>
+          <div className="z-10 max-w-4xl w-full text-center space-y-16">
+            <div className="space-y-8">
+              <div className="inline-flex items-center gap-3 px-8 py-3 rounded-full bg-prestige-copper/10 border border-prestige-copper/30 text-prestige-copper text-[10px] font-black uppercase tracking-[0.5em]">
+                <Crown size={14} />
+                <span>Editorial Excellence</span>
               </div>
-              <h1 className="text-6xl md:text-8xl font-serif font-black tracking-tighter">
-                Prestige <span className="text-prestige-gold italic">Foods</span>
+              <h1 className="text-7xl md:text-[10rem] font-serif font-black tracking-tighter leading-none">
+                Prestige <span className="text-prestige-copper italic font-light">— Foods</span>
               </h1>
-              <p className="text-xl text-slate-300 font-light max-w-xl mx-auto leading-relaxed">
-                Tu pasaporte al mercado global con estrategia 
-                <span className="text-prestige-gold font-bold"> World-Class</span>.
+              <p className="text-2xl text-prestige-cream/50 font-serif italic max-w-2xl mx-auto">
+                Estrategia visual para la exportación de clase mundial.
               </p>
             </div>
 
-            <div className="bg-white/[0.03] backdrop-blur-xl rounded-3xl p-10 border border-white/10 shadow-2xl relative overflow-hidden">
+            <div className="bg-white/[0.02] backdrop-blur-3xl rounded-[40px] p-12 border border-white/5 shadow-2xl relative overflow-hidden">
               {appState === AppState.IDLE && (
-                <div className="space-y-8 animate-in fade-in zoom-in-95 duration-500">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
-                    <div className="p-5 rounded-2xl bg-white/5 border border-white/5 hover:border-prestige-gold/40 transition-colors">
-                       <Leaf className="text-prestige-gold mb-3" size={24} />
-                       <h3 className="font-bold text-sm">Pura Esencia</h3>
+                <div className="space-y-12 animate-in fade-in zoom-in-95 duration-700">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+                    <div className="p-6 rounded-2xl border border-white/5 hover:border-prestige-copper/30 transition-all group">
+                       <Zap className="text-prestige-copper mb-4 group-hover:scale-110 transition-transform" size={20} />
+                       <h3 className="font-bold text-xs uppercase tracking-widest mb-1">Impacto</h3>
+                       <p className="text-[11px] opacity-40 uppercase tracking-tighter">Narrativa Persuasiva</p>
                     </div>
-                    <div className="p-5 rounded-2xl bg-white/5 border border-white/5 hover:border-prestige-gold/40 transition-colors">
-                       <Globe className="text-prestige-gold mb-3" size={24} />
-                       <h3 className="font-bold text-sm">Global Reach</h3>
+                    <div className="p-6 rounded-2xl border border-white/5 hover:border-prestige-copper/30 transition-all group">
+                       <Shield className="text-prestige-copper mb-4 group-hover:scale-110 transition-transform" size={20} />
+                       <h3 className="font-bold text-xs uppercase tracking-widest mb-1">Confianza</h3>
+                       <p className="text-[11px] opacity-40 uppercase tracking-tighter">Datos Certificados</p>
                     </div>
-                    <div className="p-5 rounded-2xl bg-white/5 border border-white/5 hover:border-prestige-gold/40 transition-colors">
-                       <Briefcase className="text-prestige-gold mb-3" size={24} />
-                       <h3 className="font-bold text-sm">Pitch Pro</h3>
+                    <div className="p-6 rounded-2xl border border-white/5 hover:border-prestige-copper/30 transition-all group">
+                       <Crown className="text-prestige-copper mb-4 group-hover:scale-110 transition-transform" size={20} />
+                       <h3 className="font-bold text-xs uppercase tracking-widest mb-1">Prestigio</h3>
+                       <p className="text-[11px] opacity-40 uppercase tracking-tighter">Branding Editorial</p>
                     </div>
                   </div>
 
                   <button
                     onClick={handleGenerate}
-                    className="w-full flex items-center justify-center gap-4 bg-prestige-gold hover:bg-prestige-gold/90 text-slate-950 font-black py-5 px-10 rounded-2xl transition-all shadow-[0_20px_40px_-15px_rgba(212,175,55,0.3)]"
+                    className="w-full relative group overflow-hidden bg-prestige-copper text-prestige-dark font-black py-6 px-12 rounded-2xl transition-all shadow-[0_30px_60px_-15px_rgba(184,134,11,0.4)]"
                   >
-                    <span className="text-lg uppercase tracking-wider">Generar Estrategia Maestra</span>
-                    <ArrowRight />
+                    <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity"></div>
+                    <div className="flex items-center justify-center gap-4">
+                      <span className="text-sm uppercase tracking-[0.4em]">Curar Estrategia Maestra</span>
+                      <ArrowRight size={20} />
+                    </div>
                   </button>
                 </div>
               )}
 
               {appState === AppState.GENERATING && (
-                <div className="py-16 flex flex-col items-center justify-center space-y-8 animate-in fade-in duration-500">
-                  <div className="w-16 h-16 border-4 border-prestige-gold/20 border-t-prestige-gold rounded-full animate-spin"></div>
+                <div className="py-20 flex flex-col items-center justify-center space-y-10 animate-in fade-in duration-500">
+                  <div className="relative">
+                    <div className="w-24 h-24 border border-prestige-copper/20 rounded-full"></div>
+                    <div className="absolute inset-0 border-t border-prestige-copper rounded-full animate-spin"></div>
+                  </div>
                   <div className="space-y-4 text-center">
-                    <h3 className="text-2xl font-serif italic text-white">{LOADING_MESSAGES[loadingMsgIdx]}</h3>
-                    <p className="text-xs text-slate-500 uppercase tracking-widest">Nuestra inteligencia está puliendo cada detalle</p>
+                    <h3 className="text-3xl font-serif italic text-prestige-cream">{LOADING_MESSAGES[loadingMsgIdx]}</h3>
+                    <div className="flex justify-center gap-1">
+                      {[1,2,3].map(i => <div key={i} className="w-1 h-1 bg-prestige-copper rounded-full animate-pulse" style={{animationDelay: `${i*200}ms`}}></div>)}
+                    </div>
                   </div>
                 </div>
               )}
 
               {appState === AppState.ERROR && (
-                 <div className="py-12 flex flex-col items-center justify-center space-y-6">
-                   <div className="p-4 bg-red-500/10 rounded-full border border-red-500/20">
-                    <AlertCircle className="text-red-400" size={40} />
-                   </div>
-                   <div className="text-center max-w-md">
-                     <h3 className="text-2xl font-bold text-red-400">Error en el Servicio</h3>
-                     <p className="text-slate-400 text-sm mt-3 leading-relaxed">
-                        {error || "Ocurrió un error inesperado al generar la presentación. Por favor, intente de nuevo."}
-                     </p>
-                   </div>
-                   <button
-                    onClick={handleReset}
-                    className="flex items-center gap-2 px-8 py-3 bg-white/10 hover:bg-white/20 rounded-xl text-sm font-bold border border-white/10 transition-all"
-                  >
-                    Reintentar
-                  </button>
+                 <div className="py-12 flex flex-col items-center justify-center space-y-8">
+                    <div className="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center border border-red-500/20">
+                      <AlertCircle className="text-red-400" size={32} />
+                    </div>
+                    <h3 className="text-2xl font-serif italic text-red-400">{error || "Error en el despliegue editorial."}</h3>
+                    <button
+                      onClick={handleReset}
+                      className="px-10 py-4 bg-white/5 hover:bg-white/10 rounded-xl text-[10px] font-black uppercase tracking-[0.4em] border border-white/10 transition-all"
+                    >
+                      Intentar de nuevo
+                    </button>
                  </div>
               )}
             </div>
