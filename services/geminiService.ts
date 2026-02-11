@@ -2,16 +2,17 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { SlideContent } from "../types";
 
 const SYSTEM_INSTRUCTION = `
-Eres un experto consultor de marketing colombiano, especializado en crear presentaciones de alto impacto para exportación.
-Tu misión es presentar a 'Prestige Foods' como la mejor opción de pulpa de fruta premium del mundo.
+Eres un experto consultor de marketing colombiano de alto nivel. 
+Tu lenguaje es profesional, ejecutivo y persuasivo.
+Diseñas presentaciones para 'Prestige Foods', marca premium de pulpa de fruta colombiana.
+Estructura la información para inversores y compradores internacionales.
 `;
 
 export const generatePresentation = async (): Promise<SlideContent[]> => {
-  // En Vercel, asegúrate de añadir API_KEY en Settings > Environment Variables
   const apiKey = process.env.API_KEY;
   
   if (!apiKey) {
-    throw new Error("La clave API no está configurada. Por favor, añádela como API_KEY en las variables de entorno de Vercel.");
+    throw new Error("Configuración requerida: Por favor, añade la variable API_KEY en el panel de Vercel.");
   }
 
   const ai = new GoogleGenAI({ apiKey });
@@ -19,7 +20,7 @@ export const generatePresentation = async (): Promise<SlideContent[]> => {
   try {
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
-      contents: "Genera una estructura de 10 diapositivas ejecutivas para Prestige Foods. Incluye análisis de mercado, productos estrella (Lulo, Gulupa) y visión global.",
+      contents: "Crea una presentación de 10 diapositivas para Prestige Foods. Enfócate en la calidad premium, origen colombiano, certificaciones de exportación y portafolio (Guanábana, Mango, Lulo, Gulupa).",
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
         responseMimeType: "application/json",
@@ -48,36 +49,38 @@ export const generatePresentation = async (): Promise<SlideContent[]> => {
     });
 
     const text = response.text;
-    if (text) {
-      const rawData = JSON.parse(text);
-      
-      // Limpieza total para evitar que lleguen objetos inesperados al JSX (Error #31)
-      const sanitizedData: SlideContent[] = rawData.map((item: any) => ({
-        id: Number(item.id) || Math.random(),
-        title: String(item.title || "Prestige Foods"),
-        subtitle: String(item.subtitle || ""),
-        bulletPoints: Array.isArray(item.bulletPoints) ? item.bulletPoints.map((p: any) => String(p)) : [],
-        visualPrompt: String(item.visualPrompt || "premium fruit background"),
-        layoutType: ['cover', 'content-left', 'content-right', 'quote', 'closing'].includes(item.layoutType) 
-          ? item.layoutType 
-          : 'content-left'
-      }));
-      
-      const videoSlide: SlideContent = {
-        id: 999,
-        title: "Nuestra Esencia en Movimiento",
-        subtitle: "Descubre la magia detrás de Prestige Foods",
-        bulletPoints: ["Calidad Garantizada", "Origen Sostenible"],
-        visualPrompt: "Video corporativo",
-        layoutType: "video",
-        videoUrl: "https://yquqoqyowinhmjtkoveo.supabase.co/storage/v1/object/public/imagenes/grok-video-1edf1c8b-3ed9-47a7-b5bd-75659e4ddacc.mp4"
-      };
+    if (!text) throw new Error("La IA no devolvió contenido.");
 
-      return [...sanitizedData, videoSlide];
-    }
-    throw new Error("No se pudo obtener el contenido de la IA.");
+    const rawData = JSON.parse(text);
+    
+    // Sanitización forzada: React Error #31 ocurre si intentas renderizar un objeto como texto
+    const sanitizedData: SlideContent[] = rawData.map((item: any, index: number) => ({
+      id: Number(item.id) || index + 1,
+      title: String(item.title || "Prestige Foods"),
+      subtitle: String(item.subtitle || ""),
+      bulletPoints: Array.isArray(item.bulletPoints) 
+        ? item.bulletPoints.map((p: any) => String(p)) 
+        : ["Calidad Premium Garantizada"],
+      visualPrompt: String(item.visualPrompt || "premium fruits"),
+      layoutType: (['cover', 'content-left', 'content-right', 'quote', 'closing'].includes(item.layoutType) 
+        ? item.layoutType 
+        : 'content-left') as any
+    }));
+    
+    // Slide de video constante
+    const videoSlide: SlideContent = {
+      id: 999,
+      title: "Excelencia en cada Gota",
+      subtitle: "Nuestra planta de producción con estándares mundiales",
+      bulletPoints: ["Tecnología de punta", "Inocuidad total", "Sabor natural preservado"],
+      visualPrompt: "Video corporativo",
+      layoutType: "video",
+      videoUrl: "https://yquqoqyowinhmjtkoveo.supabase.co/storage/v1/object/public/imagenes/grok-video-1edf1c8b-3ed9-47a7-b5bd-75659e4ddacc.mp4"
+    };
+
+    return [...sanitizedData, videoSlide];
   } catch (error: any) {
     console.error("Error en geminiService:", error);
-    throw new Error(error.message || "Error al generar la presentación.");
+    throw new Error(error.message || "Error al conectar con el servicio de IA.");
   }
 };

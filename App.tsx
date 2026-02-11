@@ -3,7 +3,7 @@ import { AppState, SlideContent } from './types';
 import { generatePresentation } from './services/geminiService';
 import PresentationViewer from './components/PresentationViewer';
 import ChatWidget from './components/ChatWidget';
-import { Sparkles, ArrowRight, AlertCircle, Globe, Leaf, Briefcase } from 'lucide-react';
+import { Sparkles, ArrowRight, AlertCircle, Globe, Leaf, Briefcase, Key } from 'lucide-react';
 
 const LOADING_MESSAGES = [
   "Cosechando las mejores frutas colombianas...",
@@ -38,7 +38,6 @@ const App: React.FC = () => {
       setAppState(AppState.READY);
     } catch (err: any) {
       console.error(err);
-      // Forzamos el error a ser siempre un string
       setError(err.message || "Error inesperado en el consultor AI.");
       setAppState(AppState.ERROR);
     }
@@ -96,7 +95,7 @@ const App: React.FC = () => {
 
                   <button
                     onClick={handleGenerate}
-                    className="w-full flex items-center justify-center gap-4 bg-prestige-gold hover:bg-prestige-gold/90 text-slate-950 font-black py-5 px-10 rounded-2xl transition-all"
+                    className="w-full flex items-center justify-center gap-4 bg-prestige-gold hover:bg-prestige-gold/90 text-slate-950 font-black py-5 px-10 rounded-2xl transition-all shadow-[0_20px_40px_-15px_rgba(212,175,55,0.3)]"
                   >
                     <span className="text-lg uppercase tracking-wider">Generar Estrategia Maestra</span>
                     <ArrowRight />
@@ -116,16 +115,23 @@ const App: React.FC = () => {
 
               {appState === AppState.ERROR && (
                  <div className="py-12 flex flex-col items-center justify-center space-y-6">
-                   <AlertCircle className="text-red-400" size={48} />
-                   <div className="text-center">
-                     <h3 className="text-2xl font-bold">Error de Sistema</h3>
-                     <p className="text-slate-400 text-sm mt-2">{typeof error === 'string' ? error : "Ocurrió un error inesperado"}</p>
+                   <div className="p-4 bg-red-500/10 rounded-full border border-red-500/20">
+                    <AlertCircle className="text-red-400" size={40} />
+                   </div>
+                   <div className="text-center max-w-md">
+                     <h3 className="text-2xl font-bold text-red-400">Error de Configuración</h3>
+                     <p className="text-slate-400 text-sm mt-3 leading-relaxed">
+                        {error?.includes("API_KEY") 
+                          ? "Falta la clave API en Vercel. Ve a Settings > Environment Variables y añade API_KEY con tu clave de Google AI."
+                          : error || "Ocurrió un error inesperado al generar la presentación."}
+                     </p>
                    </div>
                    <button
                     onClick={handleReset}
-                    className="px-8 py-3 bg-white/10 hover:bg-white/20 rounded-xl text-sm font-bold border border-white/10"
+                    className="flex items-center gap-2 px-8 py-3 bg-white/10 hover:bg-white/20 rounded-xl text-sm font-bold border border-white/10 transition-all"
                   >
-                    Reintentar
+                    {error?.includes("API_KEY") ? <Key size={16}/> : null}
+                    {error?.includes("API_KEY") ? "Revisar Configuración" : "Reintentar"}
                   </button>
                  </div>
               )}
