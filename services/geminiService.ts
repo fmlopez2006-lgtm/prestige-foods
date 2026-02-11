@@ -3,9 +3,8 @@ import { SlideContent } from "../types";
 
 const SYSTEM_INSTRUCTION = `
 Eres un experto consultor de marketing colombiano, especializado en crear presentaciones de alto impacto (Pitch Decks) para productos de exportación.
-Tu tono es profesional pero apasionado, evocando la riqueza de la tierra colombiana ("El realismo mágico").
-Tu tarea es generar el contenido de texto para 10 diapositivas para una marca llamada "Prestige Foods" que vende pulpas de fruta premium.
-El público objetivo son colombianos viviendo en el extranjero y extranjeros amantes de las frutas exóticas (Lulo, Maracuyá, Feijoa, Guanábana, etc.).
+Tu tono es profesional pero apasionado, evocando la riqueza de la tierra colombiana.
+Tu tarea es generar el contenido de texto para 10 diapositivas para una marca llamada "Prestige Foods".
 `;
 
 export const generatePresentation = async (): Promise<SlideContent[]> => {
@@ -15,19 +14,7 @@ export const generatePresentation = async (): Promise<SlideContent[]> => {
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: `Genera una estructura de presentación de 10 diapositivas para 'Prestige Foods'.
-      La historia debe fluir:
-      1. Portada impactante.
-      2. El problema (La nostalgia, la falta de fruta real en el exterior).
-      3. La solución (Prestige Foods: Pulpa 100% natural).
-      4. Nuestros Sabores (Menciona frutas exóticas colombianas).
-      5. El proceso (Del campo a la mesa, apoyo al campesino).
-      6. Calidad Premium (Sin conservantes, sabor auténtico).
-      7. Mercado Objetivo (La diáspora colombiana y foodies).
-      8. Modelo de Negocio / Distribución.
-      9. Testimonio o Frase inspiradora sobre Colombia.
-      10. Cierre y Llamado a la acción.
-      
-      Usa un lenguaje persuasivo, elegante y con "sabor" colombiano profesional.`,
+      Usa un lenguaje persuasivo, elegante y profesional.`,
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
         responseMimeType: "application/json",
@@ -43,7 +30,7 @@ export const generatePresentation = async (): Promise<SlideContent[]> => {
                 type: Type.ARRAY,
                 items: { type: Type.STRING }
               },
-              visualPrompt: { type: Type.STRING, description: "Una descripción corta de la imagen sugerida (ej: 'Un lulo fresco cortado por la mitad')" },
+              visualPrompt: { type: Type.STRING },
               layoutType: { 
                 type: Type.STRING, 
                 enum: ['cover', 'content-left', 'content-right', 'quote', 'closing'] 
@@ -56,11 +43,20 @@ export const generatePresentation = async (): Promise<SlideContent[]> => {
     });
 
     if (response.text) {
-      const data = JSON.parse(response.text) as SlideContent[];
+      const rawData = JSON.parse(response.text) as any[];
       
-      // Append the specific video slide at the end
+      // Sanitización profunda para evitar objetos en el renderizado
+      const sanitizedData: SlideContent[] = rawData.map(item => ({
+        id: Number(item.id),
+        title: String(item.title || ''),
+        subtitle: String(item.subtitle || ''),
+        bulletPoints: Array.isArray(item.bulletPoints) ? item.bulletPoints.map((p: any) => String(p)) : [],
+        visualPrompt: String(item.visualPrompt || ''),
+        layoutType: item.layoutType as any
+      }));
+      
       const videoSlide: SlideContent = {
-        id: 100, // Assign a unique ID
+        id: 100,
         title: "Nuestra Esencia en Movimiento",
         subtitle: "Descubre la magia detrás de Prestige Foods",
         bulletPoints: [],
@@ -69,9 +65,9 @@ export const generatePresentation = async (): Promise<SlideContent[]> => {
         videoUrl: "https://yquqoqyowinhmjtkoveo.supabase.co/storage/v1/object/public/imagenes/grok-video-1edf1c8b-3ed9-47a7-b5bd-75659e4ddacc.mp4"
       };
 
-      return [...data, videoSlide];
+      return [...sanitizedData, videoSlide];
     }
-    throw new Error("No se pudo generar el contenido.");
+    throw new Error("Respuesta vacía de la IA");
   } catch (error) {
     console.error("Error generating presentation:", error);
     throw error;

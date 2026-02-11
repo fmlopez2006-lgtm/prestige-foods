@@ -31,7 +31,6 @@
         padding: 0;
       }
       
-      /* Estilos para impresión (Exportación PDF) */
       @media print {
         body { background-color: white; color: black; }
         .no-print { display: none !important; }
@@ -39,7 +38,7 @@
         .slide-container { 
           position: relative !important; 
           display: block !important; 
-          width: 297mm; /* A4 Landscape */
+          width: 297mm;
           height: 210mm;
           page-break-after: always;
           opacity: 1 !important;
@@ -47,7 +46,6 @@
         }
       }
 
-      /* Scrollbar elegante */
       ::-webkit-scrollbar { width: 6px; }
       ::-webkit-scrollbar-track { background: #0f172a; }
       ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; }
@@ -60,7 +58,7 @@
         "react-dom": "https://esm.sh/react-dom@18.3.1",
         "react-dom/": "https://esm.sh/react-dom@18.3.1/",
         "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
-        "lucide-react": "https://esm.sh/lucide-react@0.460.0?external=react",
+        "lucide-react": "https://esm.sh/lucide-react@0.460.0?deps=react@18.3.1",
         "@google/genai": "https://esm.sh/@google/genai@1.39.0"
       }
     }
