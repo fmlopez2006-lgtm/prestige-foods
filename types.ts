@@ -1,3 +1,4 @@
+
 export interface SlideContent {
   id: number;
   title: string;
@@ -19,4 +20,9 @@ export enum AppState {
   GENERATING = 'GENERATING',
   READY = 'READY',
   ERROR = 'ERROR',
+}
+
+export interface ChatMessage {
+  role: 'user' | 'model';
+  text: string;
 }
