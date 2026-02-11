@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
-import { MessageSquare, X, Send, Sparkles, User, Bot, Loader2 } from 'lucide-react';
+import { GoogleGenAI } from "@google/genai";
+import { MessageSquare, X, Send, Sparkles, Loader2 } from 'lucide-react';
 import { ChatMessage } from '../types';
+
+const USER_API_KEY = "AIzaSyA2aC6c7jW3kud36fDCmMgyxUbQq9OUpAs";
 
 const ChatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,11 +29,11 @@ const ChatWidget: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = new GoogleGenAI({ apiKey: USER_API_KEY });
       const chat = ai.chats.create({
         model: 'gemini-3-flash-preview',
         config: {
-          systemInstruction: 'Eres el Consultor Senior de Prestige Foods. Ayuda al usuario a vender pulpa de fruta colombiana premium. Sé profesional y cálido.',
+          systemInstruction: 'Eres el Consultor Senior de Prestige Foods. Ayuda al usuario a vender pulpa de fruta colombiana premium. Sé profesional, cálido y utiliza un lenguaje ejecutivo colombiano.',
         }
       });
 
@@ -45,7 +47,7 @@ const ChatWidget: React.FC = () => {
         fullResponse += chunkText;
         setMessages(prev => {
           const newMessages = [...prev];
-          newMessages[newMessages.length - 1].text = fullResponse;
+          newMessages[newMessages.length - 1].text = String(fullResponse);
           return newMessages;
         });
       }
@@ -83,21 +85,22 @@ const ChatWidget: React.FC = () => {
             </button>
           </div>
 
-          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-950/50">
             {messages.map((m, i) => (
               <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`p-3 rounded-2xl text-sm max-w-[85%] ${
+                <div className={`p-3 rounded-2xl text-sm max-w-[85%] shadow-sm ${
                   m.role === 'user' 
                     ? 'bg-prestige-gold text-slate-950 font-bold' 
                     : 'bg-white/5 text-slate-100 border border-white/10'
                 }`}>
-                  {m.text ? m.text : (isLoading && i === messages.length - 1 ? <Loader2 className="animate-spin" size={16} /> : null)}
+                  {typeof m.text === 'string' ? m.text : String(m.text)}
+                  {isLoading && i === messages.length - 1 && !m.text && <Loader2 className="animate-spin text-prestige-gold" size={16} />}
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="p-4 border-t border-white/10">
+          <div className="p-4 border-t border-white/10 bg-slate-900">
             <div className="flex gap-2">
               <input
                 type="text"
@@ -105,12 +108,12 @@ const ChatWidget: React.FC = () => {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                 placeholder="Escriba su consulta..."
-                className="flex-1 bg-slate-800 border border-white/10 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-prestige-gold"
+                className="flex-1 bg-slate-800 border border-white/10 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-prestige-gold transition-colors"
               />
               <button
                 onClick={handleSend}
                 disabled={isLoading || !input.trim()}
-                className="p-2 text-prestige-gold hover:text-white disabled:opacity-30"
+                className="p-2 text-prestige-gold hover:text-white disabled:opacity-30 transition-all hover:scale-110"
               >
                 <Send size={20} />
               </button>

@@ -3,7 +3,7 @@ import { AppState, SlideContent } from './types';
 import { generatePresentation } from './services/geminiService';
 import PresentationViewer from './components/PresentationViewer';
 import ChatWidget from './components/ChatWidget';
-import { Sparkles, ArrowRight, AlertCircle, Globe, Leaf, Briefcase, Key } from 'lucide-react';
+import { Sparkles, ArrowRight, AlertCircle, Globe, Leaf, Briefcase } from 'lucide-react';
 
 const LOADING_MESSAGES = [
   "Cosechando las mejores frutas colombianas...",
@@ -119,19 +119,16 @@ const App: React.FC = () => {
                     <AlertCircle className="text-red-400" size={40} />
                    </div>
                    <div className="text-center max-w-md">
-                     <h3 className="text-2xl font-bold text-red-400">Error de Configuración</h3>
+                     <h3 className="text-2xl font-bold text-red-400">Error en el Servicio</h3>
                      <p className="text-slate-400 text-sm mt-3 leading-relaxed">
-                        {error?.includes("API_KEY") 
-                          ? "Falta la clave API en Vercel. Ve a Settings > Environment Variables y añade API_KEY con tu clave de Google AI."
-                          : error || "Ocurrió un error inesperado al generar la presentación."}
+                        {error || "Ocurrió un error inesperado al generar la presentación. Por favor, intente de nuevo."}
                      </p>
                    </div>
                    <button
                     onClick={handleReset}
                     className="flex items-center gap-2 px-8 py-3 bg-white/10 hover:bg-white/20 rounded-xl text-sm font-bold border border-white/10 transition-all"
                   >
-                    {error?.includes("API_KEY") ? <Key size={16}/> : null}
-                    {error?.includes("API_KEY") ? "Revisar Configuración" : "Reintentar"}
+                    Reintentar
                   </button>
                  </div>
               )}

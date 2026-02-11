@@ -1,6 +1,9 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { SlideContent } from "../types";
 
+// Clave API proporcionada por el usuario para uso directo en Vercel
+const USER_API_KEY = "AIzaSyA2aC6c7jW3kud36fDCmMgyxUbQq9OUpAs";
+
 const SYSTEM_INSTRUCTION = `
 Eres un experto consultor de marketing colombiano de alto nivel. 
 Tu lenguaje es profesional, ejecutivo y persuasivo.
@@ -9,13 +12,8 @@ Estructura la información para inversores y compradores internacionales.
 `;
 
 export const generatePresentation = async (): Promise<SlideContent[]> => {
-  const apiKey = process.env.API_KEY;
-  
-  if (!apiKey) {
-    throw new Error("Configuración requerida: Por favor, añade la variable API_KEY en el panel de Vercel.");
-  }
-
-  const ai = new GoogleGenAI({ apiKey });
+  // Se usa la clave directa como solicitó el usuario para evitar errores de configuración
+  const ai = new GoogleGenAI({ apiKey: USER_API_KEY });
 
   try {
     const response = await ai.models.generateContent({
@@ -53,21 +51,20 @@ export const generatePresentation = async (): Promise<SlideContent[]> => {
 
     const rawData = JSON.parse(text);
     
-    // Sanitización forzada: React Error #31 ocurre si intentas renderizar un objeto como texto
+    // Sanitización extrema para evitar React Error #31
     const sanitizedData: SlideContent[] = rawData.map((item: any, index: number) => ({
       id: Number(item.id) || index + 1,
-      title: String(item.title || "Prestige Foods"),
-      subtitle: String(item.subtitle || ""),
+      title: typeof item.title === 'string' ? item.title : "Prestige Foods",
+      subtitle: typeof item.subtitle === 'string' ? item.subtitle : "",
       bulletPoints: Array.isArray(item.bulletPoints) 
-        ? item.bulletPoints.map((p: any) => String(p)) 
+        ? item.bulletPoints.map((p: any) => typeof p === 'string' ? p : String(p)) 
         : ["Calidad Premium Garantizada"],
-      visualPrompt: String(item.visualPrompt || "premium fruits"),
+      visualPrompt: typeof item.visualPrompt === 'string' ? item.visualPrompt : "fruits",
       layoutType: (['cover', 'content-left', 'content-right', 'quote', 'closing'].includes(item.layoutType) 
         ? item.layoutType 
         : 'content-left') as any
     }));
     
-    // Slide de video constante
     const videoSlide: SlideContent = {
       id: 999,
       title: "Excelencia en cada Gota",
