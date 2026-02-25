@@ -1,9 +1,6 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { SlideContent } from "../types";
 
-// Clave API autorizada para uso directo en Vercel por el usuario
-const USER_API_KEY = "AIzaSyA2aC6c7jW3kud36fDCmMgyxUbQq9OUpAs";
-
 const SYSTEM_INSTRUCTION = ` 
 Eres un Director Creativo de una agencia de branding de lujo en Colombia.
 Tu estilo visual es editorial, minimalista y de alto contraste (estilo revista Monocle o Kinfolk).  
@@ -11,7 +8,7 @@ IMPORTANTE: El campo 'visualPrompt' debe ser una descripción artística corta e
 `;
 
 export const generatePresentation = async (): Promise<SlideContent[]> => {
-  const ai = new GoogleGenAI({ apiKey: USER_API_KEY });
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
   try {
     const response = await ai.models.generateContent({

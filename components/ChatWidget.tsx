@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { GoogleGenAI } from "@google/genai";
-import { MessageSquare, X, Send, Sparkles, Loader2 } from 'lucide-react';
+import { MessageSquare, X, Send, Sparkles, Loader2, Phone, MessageCircle } from 'lucide-react';
 import { ChatMessage } from '../types';
-
-const USER_API_KEY = "AIzaSyA2aC6c7jW3kud36fDCmMgyxUbQq9OUpAs";
+import VoiceAssistant from './VoiceAssistant';
 
 const ChatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [mode, setMode] = useState<'chat' | 'voice'>('chat');
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([
     { role: 'model', text: '¡Hola! Soy su Consultor Senior de Prestige Foods. ¿En qué puedo asesorarle hoy?' }
@@ -29,7 +29,7 @@ const ChatWidget: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: USER_API_KEY });
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
       const chat = ai.chats.create({
         model: 'gemini-3-flash-preview',
         config: {
@@ -80,45 +80,69 @@ const ChatWidget: React.FC = () => {
               </div>
               <span className="font-serif font-bold text-white text-sm">Consultor Prestige</span>
             </div>
-            <button onClick={() => setIsOpen(false)} className="text-white/50 hover:text-white">
-              <X size={18} />
-            </button>
-          </div>
-
-          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-950/50">
-            {messages.map((m, i) => (
-              <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`p-3 rounded-2xl text-sm max-w-[85%] shadow-sm ${
-                  m.role === 'user' 
-                    ? 'bg-prestige-gold text-slate-950 font-bold' 
-                    : 'bg-white/5 text-slate-100 border border-white/10'
-                }`}>
-                  {typeof m.text === 'string' ? m.text : String(m.text)}
-                  {isLoading && i === messages.length - 1 && !m.text && <Loader2 className="animate-spin text-prestige-gold" size={16} />}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="p-4 border-t border-white/10 bg-slate-900">
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                placeholder="Escriba su consulta..."
-                className="flex-1 bg-slate-800 border border-white/10 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-prestige-gold transition-colors"
-              />
-              <button
-                onClick={handleSend}
-                disabled={isLoading || !input.trim()}
-                className="p-2 text-prestige-gold hover:text-white disabled:opacity-30 transition-all hover:scale-110"
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={() => setMode(mode === 'chat' ? 'voice' : 'chat')}
+                className="p-2 text-white/50 hover:text-prestige-gold transition-colors"
+                title={mode === 'chat' ? 'Cambiar a Voz' : 'Cambiar a Chat'}
               >
-                <Send size={20} />
+                {mode === 'chat' ? <Phone size={18} /> : <MessageCircle size={18} />}
+              </button>
+              <button onClick={() => setIsOpen(false)} className="text-white/50 hover:text-white">
+                <X size={18} />
               </button>
             </div>
           </div>
+
+          {mode === 'chat' ? (
+            <>
+              <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-950/50">
+                {messages.map((m, i) => (
+                  <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`p-3 rounded-2xl text-sm max-w-[85%] shadow-sm ${
+                      m.role === 'user' 
+                        ? 'bg-prestige-gold text-slate-950 font-bold' 
+                        : 'bg-white/5 text-slate-100 border border-white/10'
+                    }`}>
+                      {typeof m.text === 'string' ? m.text : String(m.text)}
+                      {isLoading && i === messages.length - 1 && !m.text && <Loader2 className="animate-spin text-prestige-gold" size={16} />}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="p-4 border-t border-white/10 bg-slate-900">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                    placeholder="Escriba su consulta..."
+                    className="flex-1 bg-slate-800 border border-white/10 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-prestige-gold transition-colors"
+                  />
+                  <button
+                    onClick={handleSend}
+                    disabled={isLoading || !input.trim()}
+                    className="p-2 text-prestige-gold hover:text-white disabled:opacity-30 transition-all hover:scale-110"
+                  >
+                    <Send size={20} />
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="flex-1 flex flex-col items-center justify-center p-8 bg-slate-950/50 space-y-8">
+              <div className="text-center space-y-2">
+                <h3 className="text-xl font-serif italic text-white">Asistente de Voz Live</h3>
+                <p className="text-xs text-white/40 uppercase tracking-widest">Conexión en tiempo real</p>
+              </div>
+              <VoiceAssistant />
+              <p className="text-[10px] text-white/30 text-center max-w-[200px]">
+                Hable directamente con nuestro consultor para recibir asesoría estratégica instantánea.
+              </p>
+            </div>
+          )}
         </div>
       )}
     </div>
