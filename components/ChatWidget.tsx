@@ -64,18 +64,18 @@ const ChatWidget: React.FC = () => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="group relative flex items-center justify-center w-16 h-16 bg-prestige-gold rounded-full shadow-lg hover:scale-110 transition-all"
+          className="group relative flex items-center justify-center w-16 h-16 bg-prestige-copper rounded-full shadow-lg hover:scale-110 transition-all"
         >
-          <div className="absolute inset-0 rounded-full bg-prestige-gold animate-ping opacity-20"></div>
+          <div className="absolute inset-0 rounded-full bg-prestige-copper animate-ping opacity-20"></div>
           <MessageSquare className="text-slate-950" size={28} />
         </button>
       )}
 
       {isOpen && (
-        <div className="flex flex-col w-[350px] md:w-[380px] h-[500px] bg-slate-900 border border-prestige-gold/30 rounded-3xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom-5">
-          <div className="p-4 bg-gradient-to-r from-prestige-green to-slate-900 border-b border-prestige-gold/20 flex justify-between items-center">
+        <div className="flex flex-col w-[350px] md:w-[380px] h-[500px] bg-slate-900 border border-prestige-copper/30 rounded-3xl shadow-2xl overflow-hidden">
+          <div className="p-4 bg-gradient-to-r from-prestige-emerald to-slate-900 border-b border-prestige-copper/20 flex justify-between items-center">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-prestige-gold flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-prestige-copper flex items-center justify-center">
                 <Sparkles className="text-slate-900" size={16} />
               </div>
               <span className="font-serif font-bold text-white text-sm">Consultor Prestige</span>
@@ -83,7 +83,7 @@ const ChatWidget: React.FC = () => {
             <div className="flex items-center gap-2">
               <button 
                 onClick={() => setMode(mode === 'chat' ? 'voice' : 'chat')}
-                className="p-2 text-white/50 hover:text-prestige-gold transition-colors"
+                className="p-2 text-white/50 hover:text-prestige-copper transition-colors"
                 title={mode === 'chat' ? 'Cambiar a Voz' : 'Cambiar a Chat'}
               >
                 {mode === 'chat' ? <Phone size={18} /> : <MessageCircle size={18} />}
@@ -101,11 +101,11 @@ const ChatWidget: React.FC = () => {
                   <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                     <div className={`p-3 rounded-2xl text-sm max-w-[85%] shadow-sm ${
                       m.role === 'user' 
-                        ? 'bg-prestige-gold text-slate-950 font-bold' 
+                        ? 'bg-prestige-copper text-slate-950 font-bold' 
                         : 'bg-white/5 text-slate-100 border border-white/10'
                     }`}>
                       {typeof m.text === 'string' ? m.text : String(m.text)}
-                      {isLoading && i === messages.length - 1 && !m.text && <Loader2 className="animate-spin text-prestige-gold" size={16} />}
+                      {isLoading && i === messages.length - 1 && !m.text && <Loader2 className="animate-spin text-prestige-copper" size={16} />}
                     </div>
                   </div>
                 ))}
@@ -119,12 +119,12 @@ const ChatWidget: React.FC = () => {
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                     placeholder="Escriba su consulta..."
-                    className="flex-1 bg-slate-800 border border-white/10 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-prestige-gold transition-colors"
+                    className="flex-1 bg-slate-800 border border-white/10 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-prestige-copper transition-colors"
                   />
                   <button
                     onClick={handleSend}
                     disabled={isLoading || !input.trim()}
-                    className="p-2 text-prestige-gold hover:text-white disabled:opacity-30 transition-all hover:scale-110"
+                    className="p-2 text-prestige-copper hover:text-white disabled:opacity-30 transition-all hover:scale-110"
                   >
                     <Send size={20} />
                   </button>

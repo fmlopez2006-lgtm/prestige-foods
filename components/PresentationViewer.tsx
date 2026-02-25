@@ -83,7 +83,7 @@ const PresentationViewer: React.FC<PresentationViewerProps> = ({ slides, onReset
             <span>Nuevo Proyecto</span>
           </button>
           <div className="h-4 w-[1px] bg-white/10"></div>
-          <div className="text-[10px] font-black uppercase tracking-[0.2em] text-prestige-gold">
+          <div className="text-[10px] font-black uppercase tracking-[0.2em] text-prestige-copper">
             Estrategia Prestige v1.0
           </div>
         </div>
@@ -99,7 +99,7 @@ const PresentationViewer: React.FC<PresentationViewerProps> = ({ slides, onReset
           </button>
            <button 
             onClick={() => setIsPlaying(!isPlaying)}
-            className={`p-3 rounded-xl transition-all flex items-center gap-2 text-xs font-bold uppercase tracking-widest ${isPlaying ? 'bg-prestige-gold text-slate-950' : 'hover:bg-white/10 text-white'}`}
+            className={`p-3 rounded-xl transition-all flex items-center gap-2 text-xs font-bold uppercase tracking-widest ${isPlaying ? 'bg-prestige-copper text-slate-950' : 'hover:bg-white/10 text-white'}`}
             title={isPlaying ? "Pausar" : "Auto-reproducir"}
           >
             {isPlaying ? <PauseCircle size={18} /> : <PlayCircle size={18} />}
@@ -157,7 +157,7 @@ const PresentationViewer: React.FC<PresentationViewerProps> = ({ slides, onReset
             key={idx}
             onClick={() => setCurrentIndex(idx)}
             className={`h-1 rounded-full transition-all duration-500 ease-out ${
-              idx === currentIndex ? 'w-16 bg-prestige-gold' : 'w-4 bg-white/10 hover:bg-white/30'
+              idx === currentIndex ? 'w-16 bg-prestige-copper' : 'w-4 bg-white/10 hover:bg-white/30'
             }`}
           />
         ))}
